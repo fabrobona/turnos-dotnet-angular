@@ -1,0 +1,117 @@
+<section class="cabecera">
+  <div>
+    <h1>{{ editando() ? 'Reprogramar turno' : 'Nuevo turno' }}</h1>
+    @if (editando()) {
+      <p class="sub">Solo se puede cambiar la fecha, la hora y la duración.</p>
+    }
+  </div>
+  <a class="enlace" routerLink="/turnos">← Volver a la agenda</a>
+</section>
+
+@if (!editando()) {
+  <section class="panel panel-mensaje" aria-labelledby="titulo-mensaje">
+    <h2 id="titulo-mensaje">Pegar un mensaje <span class="chip">opcional</span></h2>
+    <p class="ayuda">
+      Copia lo que escribió el cliente (por ejemplo, de WhatsApp) y se completa el formulario. Siempre podés corregirlo
+      antes de guardar.
+    </p>
+    <label class="sr-only" for="mensaje">Mensaje del cliente</label>
+    <textarea
+      id="mensaje"
+      rows="3"
+      maxlength="1000"
+      placeholder="Ej: Hola, soy Ana García, quiero un corte mañana a las 15"
+      [value]="mensaje()"
+      (input)="alEscribirMensaje($event)"
+    ></textarea>
+    <div class="acciones">
+      <button type="button" class="btn" [disabled]="!mensaje().trim() || interpretando()" (click)="interpretar()">
+        {{ interpretando() ? 'Interpretando…' : 'Interpretar mensaje' }}
+      </button>
+    </div>
+    @if (sugerencia(); as s) {
+      <p class="resultado" role="status">
+        Interpretado con {{ s.origen === 'gemini' ? 'IA (Gemini)' : 'reglas básicas' }}.
+        @if (faltantes().length) {
+          No se pudo deducir: {{ faltantes().join(', ') }}.
+        }
+        Revisá los datos antes de guardar.
+      </p>
+    }
+  </section>
+}
+
+@if (cargando()) {
+  <p class="mensaje" role="status">Cargando turno…</p>
+} @else {
+  <form class="panel" [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+    @if (errorGeneral(); as mensajeError) {
+      <div class="alerta alerta-error" role="alert">{{ mensajeError }}</div>
+    }
+
+    <div class="grilla">
+      <label class="campo">
+        Cliente
+        <input formControlName="clienteNombre" autocomplete="off" />
+        @if (errorDe('clienteNombre'); as e) {
+          <span class="error">{{ e }}</span>
+        }
+      </label>
+
+      <label class="campo">
+        Teléfono (opcional)
+        <input formControlName="clienteTelefono" type="tel" autocomplete="off" />
+        @if (errorDe('clienteTelefono'); as e) {
+          <span class="error">{{ e }}</span>
+        }
+      </label>
+
+      <label class="campo">
+        Servicio
+        <input formControlName="servicio" autocomplete="off" />
+        @if (errorDe('servicio'); as e) {
+          <span class="error">{{ e }}</span>
+        }
+      </label>
+
+      <label class="campo">
+        Duración (minutos)
+        <input formControlName="duracionMinutos" type="number" min="5" max="480" step="5" />
+        @if (errorDe('duracionMinutos'); as e) {
+          <span class="error">{{ e }}</span>
+        }
+      </label>
+
+      <label class="campo">
+        Fecha
+        <input formControlName="fecha" type="date" />
+        @if (errorDe('fecha'); as e) {
+          <span class="error">{{ e }}</span>
+        }
+      </label>
+
+      <label class="campo">
+        Hora
+        <input formControlName="hora" type="time" />
+        @if (errorDe('hora'); as e) {
+          <span class="error">{{ e }}</span>
+        }
+      </label>
+
+      <label class="campo campo-ancho">
+        Notas (opcional)
+        <textarea formControlName="notas" rows="2"></textarea>
+        @if (errorDe('notas'); as e) {
+          <span class="error">{{ e }}</span>
+        }
+      </label>
+    </div>
+
+    <div class="acciones">
+      <a class="btn" routerLink="/turnos">Cancelar</a>
+      <button type="submit" class="btn btn-primario" [disabled]="guardando()">
+        {{ guardando() ? 'Guardando…' : editando() ? 'Guardar cambios' : 'Crear turno' }}
+      </button>
+    </div>
+  </form>
+}

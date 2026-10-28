@@ -1,0 +1,51 @@
+.topbar {
+  background: var(--tarjeta);
+  border-bottom: 1px solid var(--borde);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+}
+
+.marca {
+  color: var(--texto);
+  text-decoration: none;
+  font-size: 1.05rem;
+}
+
+.marca strong {
+  color: var(--acento);
+}
+
+nav {
+  display: flex;
+  gap: 4px;
+}
+
+nav a {
+  color: var(--texto-suave);
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.92rem;
+}
+
+nav a:hover {
+  background: var(--fondo-suave);
+}
+
+nav a.activo {
+  color: var(--acento);
+  background: var(--acento-suave);
+  font-weight: 600;
+}
+
+main {
+  padding-block: 28px 64px;
+}

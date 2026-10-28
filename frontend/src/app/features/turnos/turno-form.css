@@ -1,0 +1,23 @@
+.panel-mensaje {
+  border-style: dashed;
+}
+
+.panel-mensaje textarea {
+  margin-top: 10px;
+  resize: vertical;
+}
+
+.resultado {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: var(--acento-suave);
+  color: var(--acento);
+  font-size: 0.88rem;
+}
+
+.mensaje {
+  text-align: center;
+  color: var(--texto-suave);
+  padding: 40px 0;
+}

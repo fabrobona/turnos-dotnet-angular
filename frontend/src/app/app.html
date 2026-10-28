@@ -1,0 +1,15 @@
+<header class="topbar">
+  <div class="contenedor barra">
+    <a class="marca" routerLink="/turnos">Gestor de <strong>turnos</strong></a>
+    <nav aria-label="Principal">
+      <a routerLink="/turnos" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }">Agenda</a>
+      <a routerLink="/turnos/nuevo" routerLinkActive="activo">Nuevo turno</a>
+    </nav>
+  </div>
+</header>
+
+<main class="contenedor">
+  <router-outlet />
+</main>
+
+<app-avisos />

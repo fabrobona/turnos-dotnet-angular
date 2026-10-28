@@ -1,0 +1,132 @@
+.filtros {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.filtros .campo {
+  min-width: 170px;
+}
+
+.mensaje,
+.vacio {
+  text-align: center;
+  color: var(--texto-suave);
+  padding: 40px 0;
+}
+
+.vacio {
+  background: var(--tarjeta);
+  border: 1px dashed var(--borde);
+  border-radius: var(--radio);
+}
+
+.resumen {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 14px;
+  font-size: 0.9rem;
+}
+
+.resumen li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tabla-wrap {
+  background: var(--tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  overflow: hidden;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.93rem;
+}
+
+.tabla th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--texto-suave);
+  background: var(--fondo-suave);
+}
+
+.tabla td {
+  padding: 13px 16px;
+  border-top: 1px solid var(--borde);
+  vertical-align: top;
+}
+
+.hora,
+.detalle {
+  display: block;
+  color: var(--texto-suave);
+  font-size: 0.82rem;
+}
+
+.celda-acciones {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 720px) {
+  .tabla thead {
+    display: none;
+  }
+
+  .tabla,
+  .tabla tbody,
+  .tabla tr,
+  .tabla td {
+    display: block;
+  }
+
+  .tabla tr {
+    padding: 8px 4px;
+    border-top: 1px solid var(--borde);
+  }
+
+  .tabla tr:first-child {
+    border-top: 0;
+  }
+
+  .tabla td {
+    border: 0;
+    padding: 6px 12px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    text-align: right;
+  }
+
+  .tabla td::before {
+    content: attr(data-label);
+    color: var(--texto-suave);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-align: left;
+    flex-shrink: 0;
+  }
+
+  .tabla td.celda-acciones {
+    justify-content: flex-start;
+  }
+
+  .tabla td.celda-acciones::before {
+    display: none;
+  }
+}

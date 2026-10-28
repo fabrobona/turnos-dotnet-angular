@@ -1,0 +1,23 @@
+services:
+  api:
+    build: ./backend
+    environment:
+      # Datos ficticios para que la agenda no arranque vacía.
+      Turnos__CargarDatosDeEjemplo: "true"
+      Cors__Origins__0: "http://localhost:8080"
+      # Opcional: con una clave, los mensajes se interpretan con Gemini; sin ella se usan las reglas.
+      Gemini__ApiKey: "${GEMINI_API_KEY:-}"
+    volumes:
+      - turnos-data:/data
+    restart: unless-stopped
+
+  web:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  turnos-data:

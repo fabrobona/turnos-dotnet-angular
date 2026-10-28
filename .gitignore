@@ -1,0 +1,29 @@
+# .NET
+bin/
+obj/
+*.db
+*.db-shm
+*.db-wal
+*.user
+.vs/
+TestResults/
+coverage/
+
+# Angular / Node
+node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/coverage/
+
+# Secretos y entorno local
+.env
+.env.*
+!.env.example
+appsettings.*.local.json
+secrets.json
+
+# Editores y sistema
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

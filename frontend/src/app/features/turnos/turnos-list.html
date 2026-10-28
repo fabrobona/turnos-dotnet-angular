@@ -1,0 +1,107 @@
+<section class="cabecera">
+  <div>
+    <h1>Agenda</h1>
+    <p class="sub">Turnos ordenados por fecha. Un turno cancelado libera su horario.</p>
+  </div>
+  <a class="btn btn-primario" routerLink="/turnos/nuevo">Nuevo turno</a>
+</section>
+
+<section class="filtros" aria-label="Filtros">
+  <label class="campo">
+    Estado
+    <select [value]="estado()" (change)="alCambiarEstado($event)">
+      <option value="">Todos</option>
+      @for (e of estados; track e) {
+        <option [value]="e">{{ e }}</option>
+      }
+    </select>
+  </label>
+  <label class="campo">
+    Día
+    <input type="date" [value]="dia()" (change)="alCambiarDia($event)" />
+  </label>
+  @if (hayFiltros()) {
+    <button type="button" class="btn btn-sm" (click)="limpiarFiltros()">Limpiar filtros</button>
+  }
+</section>
+
+@if (cargando()) {
+  <p class="mensaje" role="status">Cargando turnos…</p>
+} @else if (error(); as mensaje) {
+  <div class="alerta alerta-error" role="alert">
+    <span>{{ mensaje }}</span>
+    <button type="button" class="btn btn-sm" (click)="cargar()">Reintentar</button>
+  </div>
+} @else if (turnos().length === 0) {
+  <div class="vacio">
+    <p>No hay turnos{{ hayFiltros() ? ' con estos filtros' : ' todavía' }}.</p>
+    <a class="enlace" routerLink="/turnos/nuevo">Crear el primero</a>
+  </div>
+} @else {
+  <ul class="resumen" aria-label="Resumen por estado">
+    @for (r of resumen(); track r.estado) {
+      <li>
+        <app-estado-badge [estado]="r.estado" />
+        <span>{{ r.cantidad }}</span>
+      </li>
+    }
+  </ul>
+
+  <div class="tabla-wrap">
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th scope="col">Fecha y hora</th>
+          <th scope="col">Cliente</th>
+          <th scope="col">Servicio</th>
+          <th scope="col">Estado</th>
+          <th scope="col"><span class="sr-only">Acciones</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (t of turnos(); track t.id) {
+          <tr>
+            <td data-label="Fecha y hora">
+              <strong>{{ t.inicio | date: 'EEE d MMM' }}</strong>
+              <span class="hora">{{ t.inicio | date: 'HH:mm' }} – {{ t.fin | date: 'HH:mm' }}</span>
+            </td>
+            <td data-label="Cliente">
+              {{ t.clienteNombre }}
+              @if (t.clienteTelefono) {
+                <span class="detalle">{{ t.clienteTelefono }}</span>
+              }
+            </td>
+            <td data-label="Servicio">
+              {{ t.servicio }}
+              <span class="detalle">{{ t.duracionMinutos }} min</span>
+              @if (t.notas) {
+                <span class="detalle">{{ t.notas }}</span>
+              }
+            </td>
+            <td data-label="Estado"><app-estado-badge [estado]="t.estado" /></td>
+            <td class="celda-acciones">
+              @if (t.estado === 'Pendiente') {
+                <button type="button" class="btn btn-sm" (click)="cambiar(t, 'confirmar')">Confirmar</button>
+              }
+              @if (t.estado === 'Confirmado') {
+                <button
+                  type="button"
+                  class="btn btn-sm"
+                  [disabled]="!yaEmpezo(t)"
+                  [attr.title]="yaEmpezo(t) ? null : 'Todavía no empezó'"
+                  (click)="cambiar(t, 'completar')"
+                >
+                  Completar
+                </button>
+              }
+              @if (esActivo(t)) {
+                <a class="btn btn-sm" [routerLink]="['/turnos', t.id, 'editar']">Reprogramar</a>
+                <button type="button" class="btn btn-sm btn-peligro" (click)="cancelar(t)">Cancelar</button>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
